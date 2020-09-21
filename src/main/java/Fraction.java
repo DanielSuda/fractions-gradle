@@ -10,40 +10,56 @@ public class Fraction implements IFraction {
         if (denominator == 0) throw new ArithmeticException("Cannot Divide by 0");
     }
 
+    private Fraction reduceFraction(int numerator, int denominator) {
+        int d;
+        d = greatestCommonDivisor(numerator, denominator);
+
+        numerator = numerator / d;
+        denominator = denominator / d;
+        return new Fraction(numerator, denominator);
+    }
+
+    private int greatestCommonDivisor(int a, int b) {
+        if (b == 0)
+            return a;
+        return greatestCommonDivisor(b, a % b);
+    }
+
     @Override
-    public Integer getNumerator() {
+    public @NotNull
+    Integer getNumerator() {
         return numerator;
     }
 
     @Override
-    public Integer getDenominator() {
+    public @NotNull
+    Integer getDenominator() {
         return denominator;
     }
 
     @Override
-    public IFraction plus(IFraction other) {
-        throw new UnsupportedOperationException();
+    public @NotNull
+    IFraction plus(@NotNull IFraction other) {
+        return reduceFraction((numerator * other.getDenominator()) + (denominator * other.getNumerator()), denominator * other.getDenominator());
     }
 
     @Override
-    public IFraction minus(IFraction other) {
-        throw new UnsupportedOperationException();
+    public @NotNull
+    IFraction minus(@NotNull IFraction other) {
+        return reduceFraction((numerator * other.getDenominator()) - (denominator * other.getNumerator()), denominator * other.getDenominator());
     }
 
     @Override
-    public IFraction times(IFraction other) {
-        throw new UnsupportedOperationException();
+    public @NotNull
+    IFraction times(@NotNull IFraction other) {
+        return reduceFraction(this.numerator * other.getNumerator(), this.denominator * other.getDenominator());
     }
 
     @Override
-    public IFraction dividedBy(IFraction other) {
-        throw new UnsupportedOperationException();
+    public @NotNull
+    IFraction dividedBy(@NotNull IFraction other) {
+        return reduceFraction(this.numerator * other.getDenominator(), this.denominator * other.getNumerator());
     }
-
-    public static Fraction createNormalised(Integer numerator, Integer denominator) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public String toString() {
         return "Fraction " + numerator + "|" + denominator;
